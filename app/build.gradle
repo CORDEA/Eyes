@@ -22,6 +22,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    def props = new Properties()
+    file("app.properties").withInputStream { props.load(it) }
+    flavorDimensions "api"
+    productFlavors {
+        dev {
+            dimension "api"
+            buildConfigField "String", "API_BASE_URL", props.getProperty("url")
+        }
+    }
 }
 
 dependencies {
