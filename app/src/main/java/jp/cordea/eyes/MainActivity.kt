@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.LocationServices
 import dagger.android.support.DaggerAppCompatActivity
 import jp.cordea.eyes.databinding.ActivityMainBinding
 import javax.inject.Inject
@@ -12,12 +13,16 @@ class MainActivity : DaggerAppCompatActivity(), MainContract.View {
     @Inject
     lateinit var presenter: MainContract.Presenter
 
+    private val client by lazy { LocationServices.getFusedLocationProviderClient(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.button.setOnClickListener { }
+        binding.button.setOnClickListener {
+            presenter.observeLocation(client.lastLocation.asChannel())
+        }
 
         val granted = ActivityCompat.checkSelfPermission(
             this,

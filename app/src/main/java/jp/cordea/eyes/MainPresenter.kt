@@ -1,6 +1,8 @@
 package jp.cordea.eyes
 
+import android.location.Location
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -11,10 +13,12 @@ class MainPresenter @Inject constructor(
 ) : MainContract.Presenter, CoroutineScope {
     override val coroutineContext: CoroutineContext get() = Dispatchers.Main + SupervisorJob()
 
-    override fun postLatLng(latitude: String, longitude: String) {
+    override fun observeLocation(channel: Channel<Location>) {
         launch(CoroutineExceptionHandler { _, throwable -> Timber.e(throwable) }) {
-            val response = repository.postLatLng(latitude, longitude)
-            view.updateText(response)
+            for (c in channel) {
+                val response = repository.postLatLng(c.latitude, c.longitude)
+                view.updateText(response)
+            }
         }
     }
 
