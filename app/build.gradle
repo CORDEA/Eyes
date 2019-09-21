@@ -31,6 +31,7 @@ android {
             buildConfigField "String", "API_BASE_URL", props.getProperty("url")
         }
     }
+    viewBinding.enabled = true
 }
 
 dependencies {
