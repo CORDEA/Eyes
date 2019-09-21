@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import dagger.android.support.DaggerAppCompatActivity
+import jp.cordea.eyes.databinding.ActivityMainBinding
 import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity(), MainContract.View {
@@ -13,7 +14,10 @@ class MainActivity : DaggerAppCompatActivity(), MainContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.button.setOnClickListener { }
 
         val granted = ActivityCompat.checkSelfPermission(
             this,
